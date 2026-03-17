@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolvedor de Conflitos - CRCs</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Swiper CSS (opcional, se quiser usar o slider) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    
+    <!-- Nosso CSS no estilo do modelo -->
+    <link rel="stylesheet" href="/static/css/estilo.css">
+</head>
+<body>
+    <!-- Botões de Janela (estilo macOS) -->
+    <div class="window--buttons">
+        <div class="window__close" onclick="fecharJanela()"></div>
+        <div class="window__minimize" onclick="minimizarJanela()"></div>
+        <div class="window__maximize" onclick="maximizarJanela()"></div>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="container" id="container">
+        <!-- SIDEBAR ESQUERDA -->
+        <aside>
+            <div>
+                <input type="text" placeholder="Search" id="searchInput" onkeyup="filtrarBusca()" />
+                
+                <button class="active" id="sidebar-btn" onclick="mudarAba('dashboard', this)">
+                    <i class="fa fa-chart-pie"></i> Dashboard
+                </button>
+                <button id="sidebar-btn" onclick="mudarAba('conflitos', this)">
+                    <i class="fa fa-exclamation-triangle"></i> Conflitos
+                </button>
+                <button id="sidebar-btn" onclick="mudarAba('historico', this)">
+                    <i class="fa fa-clock"></i> Histórico
+                </button>
+                <button id="sidebar-btn" onclick="mudarAba('ranking', this)">
+                    <i class="fa fa-trophy"></i> Ranking
+                </button>
+                <button id="sidebar-btn" onclick="mudarAba('config', this)">
+                    <i class="fa fa-sliders"></i> Config
+                </button>
+                <button id="sidebar-btn" onclick="mudarAba('upload', this)">
+                    <i class="fa fa-upload"></i> Upload
+                </button>
+                <button id="sidebar-btn" onclick="mudarAba('perfil', this)">
+                    <i class="fa fa-user"></i> Perfil
+                </button>
+                <button id="sidebar-btn" onclick="mudarAba('sistema', this)">
+                    <i class="fa fa-gear"></i> Sistema
+                </button>
+            </div>
+
+            <div class="profile">
+                <img src="https://ui-avatars.com/api/?name=Admin+CRC&background=2e7d32&color=fff&size=128" alt="Profile Pic" class="profile--pic" />
+                <h1> Henrique 🍺</h1>
+            </div>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="content" id="content">
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner-border"></div>
+                <h3>Carregando...</h3>
+            </div>
+
+            <!-- LEFT CONTENT (Conteúdo principal) -->
+            <div class="left-content" id="left-content"></div>
+
+                        <!-- RIGHT CONTENT (Sidebar do Ranking) -->
+                <div class="right-content" id="right-content"></div>
+            </div> <!-- FECHA content -->  <!-- LINHA ADICIONADA -->
+        </div> <!-- FECHA container -->
+
+    <!-- MODAL DE RESOLUÇÃO -->
+    <div class="modal" id="modalResolver">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa fa-bolt"></i> Resolver Conflito</h3>
+                <button class="close" onclick="fecharModal('resolver')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info" id="detalhesConflito"></div>
+                
+                <h4 style="margin-bottom: 15px; color: white;">📊 Análise dos CRCs</h4>
+                <div id="listaAnalise" style="margin-bottom: 20px;"></div>
+                
+                <div class="alert alert-warning" id="sugestaoBox" style="margin-bottom: 20px;">
+                    <i class="fa fa-lightbulb"></i>
+                    <span id="sugestaoTexto"></span>
+                    <button class="btn" style="background: #4caf50; color: white; padding: 5px 15px; width: auto; margin-left: 10px;" onclick="aplicarSugestao()">Aplicar</button>
+                </div>
+                
+                <h4 style="margin-bottom: 15px; color: white;">👆 Escolha o Vencedor</h4>
+                <div class="vencedor-buttons" id="botoesVencedor"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #666;" onclick="fecharModal('resolver')">Cancelar</button>
+                <button class="btn" style="background: #4caf50;" onclick="confirmarResolucao()">
+                    <i class="fa fa-check"></i> Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIGURAÇÃO -->
+    <div class="modal" id="modalConfig">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa fa-gear"></i> Configurar CRC</h3>
+                <button class="close" onclick="fecharModal('config')">&times;</button>
+            </div>
+            <div class="modal-body" id="configCRCBody"></div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #666;" onclick="fecharModal('config')">Fechar</button>
+                <button class="btn" style="background: #4caf50;" onclick="salvarConfigModal()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/resolvedor.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+    <script src="/static/js/conflitos.js"></script>
+    <script src="/static/js/historico.js"></script>
+    <script src="/static/js/ranking.js"></script>
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/uploads.js"></script>
+    <script src="/static/js/perfil.js"></script>
+    <script src="/static/js/sistema.js"></script>
+
+    <script>
+        // Funções das janelas (estilo macOS)
+        function fecharJanela() {
+            document.querySelector('.container').style.display = 'none';
+            setTimeout(() => {
+                alert('Oh No! O app foi fechado. Recarregue a página para abrir novamente.');
+            }, 500);
+        }
+
+        function minimizarJanela() {
+            document.querySelector('.container').style.transform = 'scale(0)';
+            setTimeout(() => {
+                alert('App minimizado! Recarregue a página para restaurar.');
+                document.querySelector('.container').style.transform = 'scale(1)';
+            }, 500);
+        }
+
+        function maximizarJanela() {
+            const container = document.querySelector('.container');
+            if (container.style.width === '100%') {
+                container.style.width = '90%';
+                container.style.height = '90%';
+            } else {
+                container.style.width = '100%';
+                container.style.height = '100%';
+            }
+        }
+    </script>
+</body>
+</html>
